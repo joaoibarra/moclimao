@@ -1,5 +1,6 @@
-/.idea/workspace.xml
-/.idea/libraries
+.idea
+.idea/workspace.xml
+.idea/libraries
 .DS_Store
 /captures
 # Built application files
