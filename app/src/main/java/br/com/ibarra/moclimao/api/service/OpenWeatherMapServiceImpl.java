@@ -14,7 +14,6 @@ import retrofit2.Retrofit;
  * Created by joaoibarra on 05/01/16.
  */
 public class OpenWeatherMapServiceImpl {
-    public String APPID = "f80e716710bb0e8dfead4c2017034aec";
 
     public static OpenWeatherMapService openWeatherMapService;
 
@@ -29,14 +28,11 @@ public class OpenWeatherMapServiceImpl {
 
     public OpenWeatherMapService create() {
         final OkHttpClient okHttpClient = new OkHttpClient();
-      /*  okHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
-        okHttpClient.setConnectTimeout(60, TimeUnit.SECONDS);*/
-
         Gson gson = new GsonBuilder()
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://www.netshoes.com.br")
+                .baseUrl("http://api.openweathermap.org")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

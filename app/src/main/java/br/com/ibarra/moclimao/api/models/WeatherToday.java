@@ -2,13 +2,15 @@ package br.com.ibarra.moclimao.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by joaoibarra on 05/01/16.
  */
 public class WeatherToday {
     @SerializedName("coord")
     private Coordinates coordinates;
-    private Weather weather;
+    private List<Weather> weather;
     private String base;
     private Main main;
     private Rain rain;

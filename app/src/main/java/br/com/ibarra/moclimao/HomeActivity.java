@@ -8,8 +8,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-public class HomeActivity extends AppCompatActivity {
+import br.com.ibarra.moclimao.api.models.WeatherToday;
+import br.com.ibarra.moclimao.api.service.OpenWeatherMapServiceImpl;
+import br.com.ibarra.moclimao.ui.BaseActivity;
+import butterknife.Bind;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+public class HomeActivity extends AppCompatActivity implements BaseActivity{
+    @Bind(R.id.progressbar) LinearLayout progressbarLayout;
+    @Bind(R.id.error) RelativeLayout errorLayout;
+    @Bind(R.id.content) RelativeLayout contentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getWeather();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,5 +62,59 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getWeather(){
+        onLoadProgress();
+        Call<WeatherToday> call = OpenWeatherMapServiceImpl.getInstance().getWeatherToday("Campo Grande", "metric");
+        call.enqueue(new Callback<WeatherToday>() {
+            @Override
+            public void onResponse(Response<WeatherToday> response) {
+                if (response.isSuccess()) {
+                    WeatherToday weatherToday = response.body();
+                    onFinishProgress();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.fillInStackTrace();
+                onFinishProgress();
+                onFinishError();
+            }
+        });
+    }
+
+    @Override
+    public void onLoadProgress() {
+        hideError();
+        hideContent();
+        progressbarLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onFinishProgress() {
+        progressbarLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onFinishError() {
+        hideContent();
+        errorLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideError() {
+        errorLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideContent() {
+        contentLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showContent() {
+        contentLayout.setVisibility(View.VISIBLE);
     }
 }
