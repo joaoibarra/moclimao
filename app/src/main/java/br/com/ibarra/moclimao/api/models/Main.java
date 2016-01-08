@@ -16,4 +16,20 @@ public class Main {
 
     @SerializedName("temp_max")
     private String maximumTemperature;
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public String getHumidity() {
+        return humidity;
+    }
+
+    public String getMinimumTemperature() {
+        return minimumTemperature;
+    }
+
+    public String getMaximumTemperature() {
+        return maximumTemperature;
+    }
 }

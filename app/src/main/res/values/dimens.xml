@@ -13,4 +13,7 @@
     <dimen name="product_text_margin">5dp</dimen>
     <dimen name="price_group">80dp</dimen>
     <dimen name="label_font">10sp</dimen>
+    <dimen name="temperature_size">100sp</dimen>
+    <dimen name="description_size">30sp</dimen>
+    <dimen name="humidity_size">50sp</dimen>
 </resources>

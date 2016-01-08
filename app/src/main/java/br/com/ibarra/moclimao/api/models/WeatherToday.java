@@ -20,4 +20,48 @@ public class WeatherToday {
     private Long id;
     private String name;
     private int cod;
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public List<Weather> getWeather() {
+        return weather;
+    }
+
+    public String getBase() {
+        return base;
+    }
+
+    public Main getMain() {
+        return main;
+    }
+
+    public Rain getRain() {
+        return rain;
+    }
+
+    public Cloud getClouds() {
+        return clouds;
+    }
+
+    public String getDt() {
+        return dt;
+    }
+
+    public Sys getSys() {
+        return sys;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCod() {
+        return cod;
+    }
 }

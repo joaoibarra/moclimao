@@ -10,11 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import br.com.ibarra.moclimao.api.models.WeatherToday;
 import br.com.ibarra.moclimao.api.service.OpenWeatherMapServiceImpl;
 import br.com.ibarra.moclimao.ui.BaseActivity;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,11 +26,15 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
     @Bind(R.id.progressbar) LinearLayout progressbarLayout;
     @Bind(R.id.error) RelativeLayout errorLayout;
     @Bind(R.id.content) RelativeLayout contentLayout;
+    @Bind(R.id.temperature) TextView textViewTemperature;
+    @Bind(R.id.description) TextView textViewDescription;
+    @Bind(R.id.humidity) TextView textViewHumidity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getWeather();
@@ -72,7 +78,9 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
             public void onResponse(Response<WeatherToday> response) {
                 if (response.isSuccess()) {
                     WeatherToday weatherToday = response.body();
+                    setLayoutValues(weatherToday);
                     onFinishProgress();
+                    showContent();
                 }
             }
 
@@ -116,5 +124,11 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
     @Override
     public void showContent() {
         contentLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void setLayoutValues(WeatherToday weatherToday){
+        textViewTemperature.setText(weatherToday.getMain().getTemperature());
+        textViewDescription.setText(weatherToday.getWeather().get(0).getDescription());
+        textViewHumidity.setText(weatherToday.getMain().getHumidity());
     }
 }
