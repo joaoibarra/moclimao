@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -12,23 +15,31 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import br.com.ibarra.moclimao.api.models.WeatherDaily;
+import br.com.ibarra.moclimao.api.models.WeatherDailyItem;
 import br.com.ibarra.moclimao.api.models.WeatherToday;
 import br.com.ibarra.moclimao.api.service.OpenWeatherMapServiceImpl;
-import br.com.ibarra.moclimao.ui.BaseActivity;
+import br.com.ibarra.moclimao.ui.activities.BaseActivity;
+import br.com.ibarra.moclimao.ui.adapters.WeatherAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class HomeActivity extends AppCompatActivity implements BaseActivity{
     @Bind(R.id.progressbar) LinearLayout progressbarLayout;
     @Bind(R.id.error) RelativeLayout errorLayout;
     @Bind(R.id.content) RelativeLayout contentLayout;
+    @Bind(R.id.weather_daily_list) RecyclerView weatherDailyList;
     @Bind(R.id.temperature) TextView textViewTemperature;
     @Bind(R.id.description) TextView textViewDescription;
     @Bind(R.id.humidity) TextView textViewHumidity;
+
+    //private WeatherAdapter weatherAdapter = new WeatherAdapter(new ArrayList<WeatherDailyItem>());
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +48,8 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        layoutManager = new LinearLayoutManager(this);
+        weatherDailyList.setLayoutManager(layoutManager);
         getWeather();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +59,7 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
                         .setAction("Action", null).show();
             }
         });
+        //weatherDailyList.setAdapter(weatherAdapter);
     }
 
     @Override
@@ -79,6 +93,31 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
                 if (response.isSuccess()) {
                     WeatherToday weatherToday = response.body();
                     setLayoutValues(weatherToday);
+                    /*onFinishProgress();
+                    showContent();*/
+                    getWeatherNextDays();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.fillInStackTrace();
+                onFinishProgress();
+                onFinishError();
+            }
+        });
+    }
+
+    public void getWeatherNextDays(){
+        //onLoadProgress();
+        Call<WeatherDaily> call = OpenWeatherMapServiceImpl.getInstance().getWeatherDaily("Campo Grande", "metric", "5");
+        call.enqueue(new Callback<WeatherDaily>() {
+            @Override
+            public void onResponse(Response<WeatherDaily> response) {
+                if (response.isSuccess()) {
+                    WeatherDaily weatherDaily = response.body();
+                    WeatherAdapter weatherAdapter = new WeatherAdapter(weatherDaily.getList());
+                    weatherDailyList.setAdapter(weatherAdapter);
                     onFinishProgress();
                     showContent();
                 }

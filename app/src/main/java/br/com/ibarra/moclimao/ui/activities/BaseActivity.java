@@ -1,4 +1,4 @@
-package br.com.ibarra.moclimao.ui;
+package br.com.ibarra.moclimao.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 
