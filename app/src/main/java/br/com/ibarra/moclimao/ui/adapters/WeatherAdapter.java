@@ -5,7 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.ibarra.moclimao.R;
 import br.com.ibarra.moclimao.api.models.WeatherDailyItem;
@@ -50,9 +58,19 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherHolder>{
             holder.getTextViewHumidity().setText(weatherToday.getMain().getHumidity());
         }else {
             WeatherDailyItem weatherDailyItem = this.weatherDailyItems.get(position);
-            holder.getTextViewDayTemperature().setText(weatherDailyItem.getDayTemperature().getDayTemperature());
-            holder.getTextViewMaxTemperature().setText(weatherDailyItem.getDayTemperature().getMaxDailyTemperature());
-            holder.getTextViewMinTemperature().setText(weatherDailyItem.getDayTemperature().getMinDailyTemperature());
+            Picasso.with(holder.getImage().getContext())
+                    .load("http://openweathermap.org/img/w/" + weatherDailyItem.getWeather().get(0).getIcon() + ".png")
+                    .into(holder.getImage());
+            Calendar date = Calendar.getInstance();
+            date.setTimeInMillis((long) Integer.parseInt(weatherDailyItem.getDt()) * 1000);
+
+            holder.getTextViewDate().setText(date.get(Calendar.DAY_OF_MONTH)+"/" + String.format("%02d", date.get(Calendar.MONTH)+1));
+
+            int max = (int) Double.parseDouble(weatherDailyItem.getDayTemperature().getMaxDailyTemperature());
+            int min = (int) Double.parseDouble(weatherDailyItem.getDayTemperature().getMinDailyTemperature());
+            holder.getTextViewMaxTemperature().setText("Máx: " + max);
+            holder.getTextViewMinTemperature().setText("Min: " + min);
+            holder.setWeatherDailyItem(weatherDailyItem);
         }
     }
 

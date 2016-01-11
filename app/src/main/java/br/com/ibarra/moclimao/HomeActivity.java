@@ -1,8 +1,12 @@
 package br.com.ibarra.moclimao;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +26,7 @@ import br.com.ibarra.moclimao.api.models.WeatherDailyItem;
 import br.com.ibarra.moclimao.api.models.WeatherToday;
 import br.com.ibarra.moclimao.api.service.OpenWeatherMapServiceImpl;
 import br.com.ibarra.moclimao.ui.activities.BaseActivity;
+import br.com.ibarra.moclimao.ui.activities.ConfigurationActivity;
 import br.com.ibarra.moclimao.ui.adapters.WeatherAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,7 +37,7 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity implements BaseActivity{
     @Bind(R.id.progressbar) LinearLayout progressbarLayout;
     @Bind(R.id.error) RelativeLayout errorLayout;
-    @Bind(R.id.content) RelativeLayout contentLayout;
+    @Bind(R.id.content) LinearLayout contentLayout;
     @Bind(R.id.weather_daily_list) RecyclerView weatherDailyList;
     @Bind(R.id.temperature) TextView textViewTemperature;
     @Bind(R.id.description) TextView textViewDescription;
@@ -40,26 +45,27 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
 
     //private WeatherAdapter weatherAdapter = new WeatherAdapter(new ArrayList<WeatherDailyItem>());
     private LinearLayoutManager layoutManager;
+    private Toolbar toolbar;
+    String defaultCity = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         layoutManager = new LinearLayoutManager(this);
         weatherDailyList.setLayoutManager(layoutManager);
-        getWeather();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(HomeActivity.this, ConfigurationActivity.class);
+                startActivity(intent);
             }
         });
-        //weatherDailyList.setAdapter(weatherAdapter);
+       setLayoutValues();
     }
 
     @Override
@@ -168,6 +174,14 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
     public void setLayoutValues(WeatherToday weatherToday){
         textViewTemperature.setText(weatherToday.getMain().getTemperature());
         textViewDescription.setText(weatherToday.getWeather().get(0).getDescription());
-        textViewHumidity.setText(weatherToday.getMain().getHumidity());
+        textViewHumidity.setText("Humidade: " + weatherToday.getMain().getHumidity() + "%");
+    }
+
+    public void setLayoutValues(){
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        defaultCity = sharedPref.getString(getString(R.string.city_key), getResources().getString(R.string.default_city));
+        getSupportActionBar().setTitle(defaultCity);
+        //radioGroupUnit.check(sharedPref.getInt(getString(R.string.unit_key), R.id.metric_unit));
+        getWeather();
     }
 }

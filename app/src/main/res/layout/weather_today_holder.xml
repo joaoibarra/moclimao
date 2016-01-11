@@ -27,7 +27,7 @@
                 android:id="@+id/unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/metric"
+                android:text="@string/metric_unit"
                 android:textSize="@dimen/temperature_size"/>
         </LinearLayout>
         <LinearLayout
@@ -43,7 +43,7 @@
                 android:id="@+id/humidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/metric"
+                android:text="@string/metric_unit"
                 android:textSize="@dimen/humidity_size"/>
         </LinearLayout>
     </LinearLayout>

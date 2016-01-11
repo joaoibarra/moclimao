@@ -1,10 +1,21 @@
 <resources>
     <string name="app_name">Mó Climão</string>
+    <string name="settings">Configurações</string>
     <string name="action_settings">Settings</string>
     <string name="description">Descrição</string>
     <string name="reload">Tentar Novamente</string>
     <string name="error_message">Ops!</string>
     <string name="error_service">Serviço indisponível</string>
     <string name="error_try_again">Tente novamente mais tarde</string>
-    <string name="metric">C°</string>
+    <string name="metric_unit">C°</string>
+    <string name="default_unit">K°</string>
+    <string name="imperial_unit">F°</string>
+    <string name="city">Cidade</string>
+    <string name="unit">Unidade de medida</string>
+    <string name="city_key">CITY</string>
+    <string name="unit_key">UNIT</string>
+    <string name="default_city">Florianópolis</string>
+    <string name="now">Tempo Agora</string>
+
+    <string name="sucess_message">Configurações salvas com sucesso.</string>
 </resources>
