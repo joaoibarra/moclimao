@@ -1,28 +1,19 @@
 package br.com.ibarra.moclimao;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
+import br.com.ibarra.moclimao.api.models.Configuration;
 import br.com.ibarra.moclimao.api.models.WeatherDaily;
-import br.com.ibarra.moclimao.api.models.WeatherDailyItem;
 import br.com.ibarra.moclimao.api.models.WeatherToday;
 import br.com.ibarra.moclimao.api.service.OpenWeatherMapServiceImpl;
 import br.com.ibarra.moclimao.ui.activities.BaseActivity;
@@ -42,17 +33,18 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
     @Bind(R.id.temperature) TextView textViewTemperature;
     @Bind(R.id.description) TextView textViewDescription;
     @Bind(R.id.humidity) TextView textViewHumidity;
+    @Bind(R.id.unit) TextView textViewUnit;
 
-    //private WeatherAdapter weatherAdapter = new WeatherAdapter(new ArrayList<WeatherDailyItem>());
     private LinearLayoutManager layoutManager;
     private Toolbar toolbar;
-    String defaultCity = "";
+    Configuration configuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        configuration = new Configuration(HomeActivity.this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         layoutManager = new LinearLayoutManager(this);
@@ -68,39 +60,15 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
        setLayoutValues();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void getWeather(){
         onLoadProgress();
-        Call<WeatherToday> call = OpenWeatherMapServiceImpl.getInstance().getWeatherToday("Campo Grande", "metric");
+        Call<WeatherToday> call = OpenWeatherMapServiceImpl.getInstance().getWeatherToday(configuration.getCity(), configuration.getUnitToString());
         call.enqueue(new Callback<WeatherToday>() {
             @Override
             public void onResponse(Response<WeatherToday> response) {
                 if (response.isSuccess()) {
                     WeatherToday weatherToday = response.body();
                     setLayoutValues(weatherToday);
-                    /*onFinishProgress();
-                    showContent();*/
                     getWeatherNextDays();
                 }
             }
@@ -115,8 +83,7 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
     }
 
     public void getWeatherNextDays(){
-        //onLoadProgress();
-        Call<WeatherDaily> call = OpenWeatherMapServiceImpl.getInstance().getWeatherDaily("Campo Grande", "metric", "5");
+        Call<WeatherDaily> call = OpenWeatherMapServiceImpl.getInstance().getWeatherDaily(configuration.getCity(), configuration.getUnitToString(), "5");
         call.enqueue(new Callback<WeatherDaily>() {
             @Override
             public void onResponse(Response<WeatherDaily> response) {
@@ -173,15 +140,13 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
 
     public void setLayoutValues(WeatherToday weatherToday){
         textViewTemperature.setText(weatherToday.getMain().getTemperature());
+        textViewUnit.setText(configuration.getUnitAbbreviation());
         textViewDescription.setText(weatherToday.getWeather().get(0).getDescription());
         textViewHumidity.setText("Humidade: " + weatherToday.getMain().getHumidity() + "%");
     }
 
     public void setLayoutValues(){
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        defaultCity = sharedPref.getString(getString(R.string.city_key), getResources().getString(R.string.default_city));
-        getSupportActionBar().setTitle(defaultCity);
-        //radioGroupUnit.check(sharedPref.getInt(getString(R.string.unit_key), R.id.metric_unit));
+        getSupportActionBar().setTitle(configuration.getCity());
         getWeather();
     }
 }

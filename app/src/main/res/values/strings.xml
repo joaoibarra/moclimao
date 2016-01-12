@@ -10,12 +10,22 @@
     <string name="metric_unit">C°</string>
     <string name="default_unit">K°</string>
     <string name="imperial_unit">F°</string>
+    <string name="metric_unit_tostring">metric</string>
+    <string name="default_unit_tostring">default</string>
+    <string name="imperial_unit_tostring">imperial</string>
     <string name="city">Cidade</string>
     <string name="unit">Unidade de medida</string>
     <string name="city_key">CITY</string>
     <string name="unit_key">UNIT</string>
     <string name="default_city">Florianópolis</string>
     <string name="now">Tempo Agora</string>
+
+    <string name="max_temperature">Máxima</string>
+    <string name="min_temperature">Mínima</string>
+    <string name="humidity">Humidade</string>
+    <string name="morning">Manhã</string>
+    <string name="evening">Tarde</string>
+    <string name="night">Noite</string>
 
     <string name="sucess_message">Configurações salvas com sucesso.</string>
 </resources>

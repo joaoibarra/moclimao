@@ -1,6 +1,7 @@
 package br.com.ibarra.moclimao.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,7 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import br.com.ibarra.moclimao.HomeActivity;
 import br.com.ibarra.moclimao.R;
+import br.com.ibarra.moclimao.api.models.Configuration;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -31,11 +34,14 @@ public class ConfigurationActivity extends AppCompatActivity implements BaseActi
     @Bind(R.id.save) FloatingActionButton fabSave;
     @Bind(R.id.unit) RadioGroup radioGroupUnit;
 
+    Configuration configuration;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
         ButterKnife.bind(this);
+        configuration = new Configuration(ConfigurationActivity.this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(null);
         setSupportActionBar(toolbar);
@@ -50,12 +56,11 @@ public class ConfigurationActivity extends AppCompatActivity implements BaseActi
             @Override
             public void onClick(View view) {
                 int selectedId = radioGroupUnit.getCheckedRadioButtonId();
-                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(getString(R.string.city_key), editTextCity.getText().toString());
-                editor.putInt(getString(R.string.unit_key), selectedId);
-                editor.commit();
-                Toast.makeText(ConfigurationActivity.this, getString(R.string.sucess_message), Toast.LENGTH_LONG);
+                configuration.setCity(editTextCity.getText().toString());
+                configuration.setUnit(selectedId);
+                Toast.makeText(ConfigurationActivity.this, getString(R.string.sucess_message), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(ConfigurationActivity.this, HomeActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -63,11 +68,8 @@ public class ConfigurationActivity extends AppCompatActivity implements BaseActi
     }
 
     private void setLayoutValues(){
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        String defaultCity = getResources().getString(R.string.default_city);
-
-        editTextCity.setText(sharedPref.getString(getString(R.string.city_key), defaultCity));
-        radioGroupUnit.check(sharedPref.getInt(getString(R.string.unit_key), R.id.metric_unit));
+        editTextCity.setText(configuration.getCity());
+        radioGroupUnit.check(configuration.getUnit());
     }
 
     @Override
