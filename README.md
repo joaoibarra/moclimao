@@ -36,7 +36,7 @@ Facilita muito a criação de testes.
 
 
 ### Sobre o desenvolvedor ###
-João Carlos Ibarra Ribeiro Filho é o fundador da Ibarrashoes. Nascido em Corumbá-MS, no dia 27 de março de 1988, João Carlos Ibarra, formou-se Bacharel em Análise de Sistemas (2006-2010) no ano de 2010. No mesmo período, tentou - tentou mesmo - cursar Engenharia da Computação. Porém foi obrigado a desistir no 8° semestre do curso.
+Nascido em Corumbá-MS, no dia 27 de março de 1988, João Carlos Ibarra, formou-se Bacharel em Análise de Sistemas (2006-2010) no ano de 2010. No mesmo período, tentou - tentou mesmo - cursar Engenharia da Computação. Porém foi obrigado a desistir no 8° semestre do curso.
 Começou a trabalhar como desenvolvedor web em 2010. Trabalha com Android desde 2011, quando ingressou na empresa Catwork. Lá desenvolvia também utilizando Cakephp, Mysql, Jquery.
 Atualmente é desenvolvedor Android na empresa Nastek Indústria e Tecnologia, onde atua desde agosto de 2014. Está envolvido em projetos das empresas Eletrobras(Acre, Amazonas, Amapá, Rondônia), Neoenergia(Celpe-PE, Coelba-BA), CPFL(Jaguariuna, Santa Cruz, Paulista) e Polícia Militar do Estado de São Paulo.
 
