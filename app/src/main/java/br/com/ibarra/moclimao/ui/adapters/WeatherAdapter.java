@@ -15,6 +15,7 @@ import br.com.ibarra.moclimao.api.models.WeatherDailyItem;
 import br.com.ibarra.moclimao.api.models.WeatherToday;
 import br.com.ibarra.moclimao.ui.holders.WeatherHolder;
 import br.com.ibarra.moclimao.util.Url;
+import br.com.ibarra.moclimao.util.Util;
 
 /**
  * Created by joaoibarra on 09/01/16.
@@ -40,15 +41,11 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherHolder>{
         Picasso.with(holder.getImage().getContext())
                 .load(Url.IMAGE + weatherDailyItem.getWeather().get(0).getIcon() + ".png")
                 .into(holder.getImage());
-        Calendar date = Calendar.getInstance();
-        date.setTimeInMillis((long) Integer.parseInt(weatherDailyItem.getDt()) * 1000);
 
-        holder.getTextViewDate().setText(date.get(Calendar.DAY_OF_MONTH)+"/" + String.format("%02d", date.get(Calendar.MONTH)+1));
+        holder.getTextViewDate().setText(Util.dateToString(weatherDailyItem.getDt()));
 
-        int max = (int) Double.parseDouble(weatherDailyItem.getDayTemperature().getMaxDailyTemperature());
-        int min = (int) Double.parseDouble(weatherDailyItem.getDayTemperature().getMinDailyTemperature());
-        holder.getTextViewMaxTemperature().setText(Integer.toString(max));
-        holder.getTextViewMinTemperature().setText(Integer.toString(min));
+        holder.getTextViewMaxTemperature().setText(Util.temperatureDoubleToString(weatherDailyItem.getDayTemperature().getMaxDailyTemperature()));
+        holder.getTextViewMinTemperature().setText(Util.temperatureDoubleToString(weatherDailyItem.getDayTemperature().getMinDailyTemperature()));
         holder.setWeatherDailyItem(weatherDailyItem);
     }
 

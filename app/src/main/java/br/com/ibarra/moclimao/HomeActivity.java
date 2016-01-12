@@ -8,9 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import br.com.ibarra.moclimao.api.models.Configuration;
 import br.com.ibarra.moclimao.api.models.WeatherDaily;
@@ -19,6 +22,8 @@ import br.com.ibarra.moclimao.api.service.OpenWeatherMapServiceImpl;
 import br.com.ibarra.moclimao.ui.activities.BaseActivity;
 import br.com.ibarra.moclimao.ui.activities.ConfigurationActivity;
 import br.com.ibarra.moclimao.ui.adapters.WeatherAdapter;
+import br.com.ibarra.moclimao.util.Url;
+import br.com.ibarra.moclimao.util.Util;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -34,6 +39,7 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
     @Bind(R.id.description) TextView textViewDescription;
     @Bind(R.id.humidity) TextView textViewHumidity;
     @Bind(R.id.unit) TextView textViewUnit;
+    @Bind(R.id.image) ImageView image;
 
     private LinearLayoutManager layoutManager;
     private Toolbar toolbar;
@@ -139,10 +145,13 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
     }
 
     public void setLayoutValues(WeatherToday weatherToday){
-        textViewTemperature.setText(weatherToday.getMain().getTemperature());
+        Picasso.with(this)
+                .load(Url.IMAGE + weatherToday.getWeather().get(0).getIcon() + ".png")
+                .into(image);
+        textViewTemperature.setText(Util.temperatureDoubleToString(weatherToday.getMain().getTemperature()));
         textViewUnit.setText(configuration.getUnitAbbreviation());
         textViewDescription.setText(weatherToday.getWeather().get(0).getDescription());
-        textViewHumidity.setText("Humidade: " + weatherToday.getMain().getHumidity() + "%");
+        textViewHumidity.setText(weatherToday.getMain().getHumidity() + "%");
     }
 
     public void setLayoutValues(){

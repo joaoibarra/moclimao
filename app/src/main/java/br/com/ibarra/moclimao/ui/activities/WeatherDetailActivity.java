@@ -22,6 +22,7 @@ import java.util.Date;
 import br.com.ibarra.moclimao.R;
 import br.com.ibarra.moclimao.api.models.WeatherDailyItem;
 import br.com.ibarra.moclimao.util.Url;
+import br.com.ibarra.moclimao.util.Util;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
@@ -72,13 +73,7 @@ public class WeatherDetailActivity extends AppCompatActivity implements BaseActi
         Picasso.with(this)
                 .load(Url.IMAGE + weatherDailyItem.getWeather().get(0).getIcon() + ".png")
                 .into(image);
-        textViewDate.setText(dateToString(weatherDailyItem.getDt()));
-    }
-
-    private String dateToString(String dateString){
-        Calendar date = Calendar.getInstance();
-        date.setTimeInMillis((long) Integer.parseInt(dateString) * 1000);
-       return date.get(Calendar.DAY_OF_MONTH) + "/" + String.format("%02d", date.get(Calendar.MONTH) + 1);
+        textViewDate.setText(Util.dateToString(weatherDailyItem.getDt()));
     }
 
     @Override
