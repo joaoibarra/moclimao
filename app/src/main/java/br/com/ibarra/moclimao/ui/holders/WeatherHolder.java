@@ -7,35 +7,44 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import br.com.ibarra.moclimao.R;
 import br.com.ibarra.moclimao.api.models.WeatherDailyItem;
 import br.com.ibarra.moclimao.ui.activities.WeatherDetailActivity;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by joaoibarra on 09/01/16.
  */
 
 public class WeatherHolder extends RecyclerView.ViewHolder
-        implements View.OnClickListener{
+        implements View.OnClickListener {
     @Nullable
-    @Bind(R.id.date) TextView textViewDate;
+    @BindView(R.id.date)
+    TextView textViewDate;
     @Nullable
-    @Bind(R.id.max_temperature) TextView textViewMaxTemperature;
+    @BindView(R.id.max_temperature)
+    TextView textViewMaxTemperature;
     @Nullable
-    @Bind(R.id.min_temperature) TextView textViewMinTemperature;
+    @BindView(R.id.min_temperature)
+    TextView textViewMinTemperature;
     @Nullable
-    @Bind(R.id.temperature) TextView textViewTemperature;
+    @BindView(R.id.temperature)
+    TextView textViewTemperature;
     @Nullable
-    @Bind(R.id.unit) TextView textViewUnit;
+    @BindView(R.id.unit)
+    TextView textViewUnit;
     @Nullable
-    @Bind(R.id.humidity) TextView textViewHumidity;
+    @BindView(R.id.humidity)
+    TextView textViewHumidity;
     @Nullable
-    @Bind(R.id.description) TextView textViewDescription;
+    @BindView(R.id.description)
+    TextView textViewDescription;
     @Nullable
-    @Bind(R.id.image) ImageView image;
+    @BindView(R.id.image)
+    ImageView image;
 
     WeatherDailyItem weatherDailyItem;
 
@@ -46,7 +55,7 @@ public class WeatherHolder extends RecyclerView.ViewHolder
     }
 
     @Override
-    public void onClick(View view){
+    public void onClick(View view) {
         Intent intent = new Intent(view.getContext(), WeatherDetailActivity.class);
         EventBus.getDefault().postSticky(getWeatherDailyItem());
         view.getContext().startActivity(intent);
