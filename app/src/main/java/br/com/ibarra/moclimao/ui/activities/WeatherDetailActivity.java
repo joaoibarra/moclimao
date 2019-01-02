@@ -1,12 +1,8 @@
 package br.com.ibarra.moclimao.ui.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,32 +12,41 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-import java.util.Date;
+import org.greenrobot.eventbus.EventBus;
 
 import br.com.ibarra.moclimao.R;
 import br.com.ibarra.moclimao.api.models.WeatherDailyItem;
 import br.com.ibarra.moclimao.util.Url;
 import br.com.ibarra.moclimao.util.Util;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by joaoibarra on 09/01/16.
  */
-public class WeatherDetailActivity extends AppCompatActivity implements BaseActivity{
-    @Bind(R.id.progressbar) LinearLayout progressbarLayout;
-    @Bind(R.id.error) RelativeLayout errorLayout;
-    @Bind(R.id.content) NestedScrollView contentLayout;
-    @Bind(R.id.date) TextView textViewDate;
-    @Bind(R.id.image) ImageView image;
-    @Bind(R.id.max_temperature) TextView textViewMaxTemperature;
-    @Bind(R.id.min_temperature) TextView textViewMinTemperature;
-    @Bind(R.id.humidity) TextView textViewHumidity;
-    @Bind(R.id.morning) TextView textViewMorning;
-    @Bind(R.id.evening) TextView textViewEvening;
-    @Bind(R.id.night) TextView textViewNight;
+public class WeatherDetailActivity extends AppCompatActivity implements BaseActivity {
+    @BindView(R.id.progressbar)
+    LinearLayout progressbarLayout;
+    @BindView(R.id.error)
+    RelativeLayout errorLayout;
+    @BindView(R.id.content)
+    NestedScrollView contentLayout;
+    @BindView(R.id.date)
+    TextView textViewDate;
+    @BindView(R.id.image)
+    ImageView image;
+    @BindView(R.id.max_temperature)
+    TextView textViewMaxTemperature;
+    @BindView(R.id.min_temperature)
+    TextView textViewMinTemperature;
+    @BindView(R.id.humidity)
+    TextView textViewHumidity;
+    @BindView(R.id.morning)
+    TextView textViewMorning;
+    @BindView(R.id.evening)
+    TextView textViewEvening;
+    @BindView(R.id.night)
+    TextView textViewNight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,7 @@ public class WeatherDetailActivity extends AppCompatActivity implements BaseActi
         setLayoutValues();
     }
 
-    private void setLayoutValues(){
+    private void setLayoutValues() {
         WeatherDailyItem weatherDailyItem = EventBus.getDefault().removeStickyEvent(WeatherDailyItem.class);
         textViewMaxTemperature.setText(weatherDailyItem.getDayTemperature().getMaxDailyTemperature());
         textViewMinTemperature.setText(weatherDailyItem.getDayTemperature().getMinDailyTemperature());

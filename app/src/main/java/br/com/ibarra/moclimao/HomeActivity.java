@@ -24,22 +24,31 @@ import br.com.ibarra.moclimao.ui.activities.ConfigurationActivity;
 import br.com.ibarra.moclimao.ui.adapters.WeatherAdapter;
 import br.com.ibarra.moclimao.util.Url;
 import br.com.ibarra.moclimao.util.Util;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity implements BaseActivity{
-    @Bind(R.id.progressbar) LinearLayout progressbarLayout;
-    @Bind(R.id.error) RelativeLayout errorLayout;
-    @Bind(R.id.content) LinearLayout contentLayout;
-    @Bind(R.id.weather_daily_list) RecyclerView weatherDailyList;
-    @Bind(R.id.temperature) TextView textViewTemperature;
-    @Bind(R.id.description) TextView textViewDescription;
-    @Bind(R.id.humidity) TextView textViewHumidity;
-    @Bind(R.id.unit) TextView textViewUnit;
-    @Bind(R.id.image) ImageView image;
+public class HomeActivity extends AppCompatActivity implements BaseActivity {
+    @BindView(R.id.progressbar)
+    LinearLayout progressbarLayout;
+    @BindView(R.id.error)
+    RelativeLayout errorLayout;
+    @BindView(R.id.content)
+    LinearLayout contentLayout;
+    @BindView(R.id.weather_daily_list)
+    RecyclerView weatherDailyList;
+    @BindView(R.id.temperature)
+    TextView textViewTemperature;
+    @BindView(R.id.description)
+    TextView textViewDescription;
+    @BindView(R.id.humidity)
+    TextView textViewHumidity;
+    @BindView(R.id.unit)
+    TextView textViewUnit;
+    @BindView(R.id.image)
+    ImageView image;
 
     private LinearLayoutManager layoutManager;
     private Toolbar toolbar;
@@ -63,16 +72,16 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
                 startActivity(intent);
             }
         });
-       setLayoutValues();
+        setLayoutValues();
     }
 
-    public void getWeather(){
+    public void getWeather() {
         onLoadProgress();
         Call<WeatherToday> call = OpenWeatherMapServiceImpl.getInstance().getWeatherToday(configuration.getCity(), configuration.getUnitToString());
         call.enqueue(new Callback<WeatherToday>() {
             @Override
-            public void onResponse(Response<WeatherToday> response) {
-                if (response.isSuccess()) {
+            public void onResponse(Call<WeatherToday> call, Response<WeatherToday> response) {
+                if (response.isSuccessful()) {
                     WeatherToday weatherToday = response.body();
                     setLayoutValues(weatherToday);
                     getWeatherNextDays();
@@ -80,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<WeatherToday> call, Throwable t) {
                 t.fillInStackTrace();
                 onFinishProgress();
                 onFinishError();
@@ -88,12 +97,12 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
         });
     }
 
-    public void getWeatherNextDays(){
+    public void getWeatherNextDays() {
         Call<WeatherDaily> call = OpenWeatherMapServiceImpl.getInstance().getWeatherDaily(configuration.getCity(), configuration.getUnitToString(), "5");
         call.enqueue(new Callback<WeatherDaily>() {
             @Override
-            public void onResponse(Response<WeatherDaily> response) {
-                if (response.isSuccess()) {
+            public void onResponse(Call<WeatherDaily> call, Response<WeatherDaily> response) {
+                if (response.isSuccessful()) {
                     WeatherDaily weatherDaily = response.body();
                     WeatherAdapter weatherAdapter = new WeatherAdapter(weatherDaily.getList());
                     weatherDailyList.setAdapter(weatherAdapter);
@@ -103,7 +112,7 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<WeatherDaily> call, Throwable t) {
                 t.fillInStackTrace();
                 onFinishProgress();
                 onFinishError();
@@ -144,7 +153,7 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
         contentLayout.setVisibility(View.VISIBLE);
     }
 
-    public void setLayoutValues(WeatherToday weatherToday){
+    public void setLayoutValues(WeatherToday weatherToday) {
         Picasso.with(this)
                 .load(Url.IMAGE + weatherToday.getWeather().get(0).getIcon() + ".png")
                 .into(image);
@@ -154,7 +163,7 @@ public class HomeActivity extends AppCompatActivity implements BaseActivity{
         textViewHumidity.setText(weatherToday.getMain().getHumidity() + "%");
     }
 
-    public void setLayoutValues(){
+    public void setLayoutValues() {
         getSupportActionBar().setTitle(configuration.getCity());
         getWeather();
     }

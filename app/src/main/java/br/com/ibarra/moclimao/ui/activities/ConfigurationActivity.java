@@ -1,11 +1,8 @@
 package br.com.ibarra.moclimao.ui.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,25 +11,30 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import br.com.ibarra.moclimao.HomeActivity;
 import br.com.ibarra.moclimao.R;
 import br.com.ibarra.moclimao.api.models.Configuration;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by joaoibarra on 09/01/16.
  */
-public class ConfigurationActivity extends AppCompatActivity implements BaseActivity{
-    @Bind(R.id.progressbar) LinearLayout progressbarLayout;
-    @Bind(R.id.error) RelativeLayout errorLayout;
-    @Bind(R.id.content) NestedScrollView contentLayout;
-    @Bind(R.id.city) EditText editTextCity;
-    @Bind(R.id.save) FloatingActionButton fabSave;
-    @Bind(R.id.unit) RadioGroup radioGroupUnit;
+public class ConfigurationActivity extends AppCompatActivity implements BaseActivity {
+    @BindView(R.id.progressbar)
+    LinearLayout progressbarLayout;
+    @BindView(R.id.error)
+    RelativeLayout errorLayout;
+    @BindView(R.id.content)
+    NestedScrollView contentLayout;
+    @BindView(R.id.city)
+    EditText editTextCity;
+    @BindView(R.id.save)
+    FloatingActionButton fabSave;
+    @BindView(R.id.unit)
+    RadioGroup radioGroupUnit;
 
     Configuration configuration;
 
@@ -67,7 +69,7 @@ public class ConfigurationActivity extends AppCompatActivity implements BaseActi
         setLayoutValues();
     }
 
-    private void setLayoutValues(){
+    private void setLayoutValues() {
         editTextCity.setText(configuration.getCity());
         radioGroupUnit.check(configuration.getUnit());
     }
